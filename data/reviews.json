@@ -1,0 +1,172 @@
+{
+  "summary": {
+    "rating": 4.9,
+    "totalCount": 3985,
+    "buyerCount": 774,
+    "allCount": 887
+  },
+  "buyerReviews": [
+    {
+      "rating": 2,
+      "text": "좋음 좋음 좋음! 외전언제나옴. 질문?",
+      "userId": "all***",
+      "date": "2026.08.18",
+      "likes": 0,
+      "isBuyer": true
+    },
+    {
+      "rating": 5,
+      "text": "좋음 좋음 좋음! 행복!",
+      "userId": "lee***",
+      "date": "2026.08.16",
+      "likes": 0,
+      "isBuyer": true
+    },
+    {
+      "rating": 4,
+      "text": "우주 만남 지침서 좋아좋아좋아",
+      "userId": "rya***",
+      "date": "2026.08.11",
+      "likes": 0,
+      "isBuyer": true
+    },
+    {
+      "rating": 5,
+      "text": "나같은 인간이 약 700p를 단 3일만에 주파했다",
+      "userId": "nic***",
+      "date": "2026.07.24",
+      "likes": 0,
+      "isBuyer": true
+    },
+    {
+      "rating": 5,
+      "text": "영화를 먼저봤고 너무 재밌었기에 원작이 궁금하여 읽어봤습니다. 2일만에 다 볼 정도로 흡인력이 좋네요.\n과학적인 접근이 많다보니 이해안되어도 결과론적으로 넘긴부분들이 종종 있긴했습니다\n\n과학적 지식이 많은분이라면 꽤나 흥미롭게 보실수 있으실것 같아요. 그리고 영화에 없던 설정들도 발견되는게 꽤나 흥미로웠습니다.",
+      "userId": "kin***",
+      "date": "2026.07.17",
+      "likes": 0,
+      "isBuyer": true
+    },
+    {
+      "rating": 5,
+      "text": "내가 눈도 없는 외계생물에게 이렇게 몰입해서 읽게 되다니",
+      "userId": "ete***",
+      "date": "2026.06.23",
+      "likes": 0,
+      "isBuyer": true
+    },
+    {
+      "rating": 5,
+      "text": "우주에는 여전히 신비가 있고, 배울 것이 있고,\n네가 있다",
+      "userId": "hin***",
+      "date": "2026.06.17",
+      "likes": 0,
+      "isBuyer": true
+    },
+    {
+      "rating": 3,
+      "text": "번역이 어색합니다.",
+      "userId": "joe***",
+      "date": "2026.06.13",
+      "likes": 0,
+      "isBuyer": true
+    },
+    {
+      "rating": 5,
+      "text": "소설은 두말할 거 없이 재밌고 영화도 각색을 잘 한 듯",
+      "userId": "sou***",
+      "date": "2026.05.31",
+      "likes": 0,
+      "isBuyer": true
+    },
+    {
+      "rating": 5,
+      "text": "재밌음. 얼굴에서 물 샘. 행복!",
+      "userId": "pin***",
+      "date": "2026.05.29",
+      "likes": 0,
+      "isBuyer": true
+    }
+  ],
+  "allReviews": [
+    {
+      "rating": 2,
+      "text": "좋음 좋음 좋음! 외전언제나옴. 질문?",
+      "userId": "all***",
+      "date": "2026.08.18",
+      "likes": 0,
+      "isBuyer": true
+    },
+    {
+      "rating": 5,
+      "text": "좋음 좋음 좋음! 행복!",
+      "userId": "lee***",
+      "date": "2026.08.16",
+      "likes": 0,
+      "isBuyer": true
+    },
+    {
+      "rating": 4,
+      "text": "우주 만남 지침서 좋아좋아좋아",
+      "userId": "rya***",
+      "date": "2026.08.11",
+      "likes": 0,
+      "isBuyer": true
+    },
+    {
+      "rating": 5,
+      "text": "중간부터 너무 재밌어서 잠도 안 자고 본 책. 좋음 좋음 좋음!",
+      "userId": "nvt***",
+      "date": "2026.07.29",
+      "likes": 0,
+      "isBuyer": false
+    },
+    {
+      "rating": 5,
+      "text": "나같은 인간이 약 700p를 단 3일만에 주파했다",
+      "userId": "nic***",
+      "date": "2026.07.24",
+      "likes": 0,
+      "isBuyer": true
+    },
+    {
+      "rating": 5,
+      "text": "영화를 먼저봤고 너무 재밌었기에 원작이 궁금하여 읽어봤습니다. 2일만에 다 볼 정도로 흡인력이 좋네요.\n과학적인 접근이 많다보니 이해안되어도 결과론적으로 넘긴부분들이 종종 있긴했습니다\n\n과학적 지식이 많은분이라면 꽤나 흥미롭게 보실수 있으실것 같아요. 그리고 영화에 없던 설정들도 발견되는게 꽤나 흥미로웠습니다.",
+      "userId": "kin***",
+      "date": "2026.07.17",
+      "likes": 0,
+      "isBuyer": true
+    },
+    {
+      "rating": 5,
+      "text": "내가 눈도 없는 외계생물에게 이렇게 몰입해서 읽게 되다니",
+      "userId": "ete***",
+      "date": "2026.06.23",
+      "likes": 0,
+      "isBuyer": true
+    },
+    {
+      "rating": 5,
+      "text": "우주에는 여전히 신비가 있고, 배울 것이 있고,\n네가 있다",
+      "userId": "hin***",
+      "date": "2026.06.17",
+      "likes": 0,
+      "isBuyer": true
+    },
+    {
+      "rating": 3,
+      "text": "번역이 어색합니다.",
+      "userId": "joe***",
+      "date": "2026.06.13",
+      "likes": 0,
+      "isBuyer": true
+    },
+    {
+      "rating": 5,
+      "text": "소설은 두말할 거 없이 재밌고 영화도 각색을 잘 한 듯",
+      "userId": "sou***",
+      "date": "2026.05.31",
+      "likes": 0,
+      "isBuyer": true
+    }
+  ]
+}

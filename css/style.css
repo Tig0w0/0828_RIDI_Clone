@@ -1,22 +1,4 @@
-:root {
-    --color-primary: #1e9eff;
-    --color-text-main: #141414;
-    --color-text-sub: #333;
-    --color-text-light: #999;
-    --color-border: #f0f0f0;
-    --color-bg-gray: #f5f5f5;
-    
-    --content-max-width: 1150px; /* Ridibooks PC uses around 1000px for content */
-}
-
-
-
-/* MAIN CONTENT */
-.main-content {
-    max-width: var(--content-max-width);
-    margin: 0 auto;
-    padding: 0 16px;
-}
+@charset "UTF-8";
 
 /* 1. HERO SLIDER */
 .slider-section {
@@ -76,89 +58,6 @@
 
 .slider-btn.next {
     right: -20px;
-}
-
-/* 4. DISCOVERY SLIDER (오늘, 리디의 발견) */
-.discovery-slider-container {
-    position: relative;
-    width: 100%;
-}
-.discovery-list {
-    display: flex;
-    gap: 16px;
-    overflow: hidden; 
-}
-.discovery-item {
-    width: calc(16.6666% - 13.33px);
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-}
-.discovery-item a {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    gap: 12px;
-}
-.discovery-cover-wrapper {
-    width: 100%;
-    /* aspect-ratio: 3 / 4 대신 호환성 높은 padding-top 핵 사용 (4/3 = 133.33%) */
-    padding-top: 133.3333%; 
-    border-radius: 4px;
-    overflow: hidden;
-    position: relative;
-    border: 1px solid rgba(0,0,0,0.1); /* 책 표지의 영역을 명확히 보여주기 위한 테두리 */
-    flex-shrink: 0;
-}
-.discovery-cover {
-    position: absolute !important;
-    top: 0;
-    left: 0;
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover;
-}
-.discovery-badge {
-    position: absolute;
-    bottom: 8px;
-    left: 8px;
-    background: #fa722e; 
-    color: white;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 2px 4px;
-    border-radius: 2px;
-}
-.discovery-text {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-.discovery-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--color-text-main);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.discovery-author {
-    font-size: 12px;
-    color: var(--color-text-light);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.discovery-rating {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--color-text-light);
-    display: flex;
-    align-items: center;
-    gap: 2px;
-}
-.discovery-rating svg {
-    color: #ccc;
 }
 
 /* 5. EVENT GRID (이벤트) */
@@ -232,112 +131,6 @@
     font-weight: 500;
 }
 
-/* 3. BOOK LIST GRID */
-.book-list-section {
-    margin-top: 50px;
-    padding-bottom: 50px;
-}
-.section-header {
-    margin-bottom: 16px;
-}
-.section-header h2 {
-    font-size: 20px;
-    font-weight: 700;
-}
-
-.book-grid-container {
-    position: relative;
-    width: 100%;
-}
-.book-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr)); /* 1fr의 기본 최소 너비(auto)를 0으로 강제하여 텍스트 길이에 의해 그리드가 늘어나는 것을 방지 */
-    grid-template-rows: repeat(3, 1fr);
-    grid-auto-flow: column;
-    gap: 6px 24px;
-}
-.book-grid-item a {
-    display: flex;
-    align-items: center; 
-    padding: 0px 0;
-}
-.book-cover-wrapper {
-    width: 80px;
-    height: 116px;
-    border-radius: 4px;
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    border: 1px solid rgba(0,0,0,0.05);
-    flex-shrink: 0;
-}
-.book-cover {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-.book-rank {
-    width: 32px;
-    text-align: center;
-    font-size: 18px;
-    font-weight: 700;
-    margin: 0 25px;
-    flex-shrink: 0;
-}
-.book-info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    overflow: hidden;
-    flex-grow: 1;
-    min-width: 0; /* flex 자식 요소의 텍스트 말줄임(...)을 위한 필수 속성 */
-}
-.book-title {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--color-text-main);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.book-author {
-    font-size: 12px;
-    color: var(--color-text-light);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.book-rating {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 12px;
-    font-weight: 700;
-    color: #fa722e; 
-}
-.rating-count {
-    color: var(--color-text-light);
-    font-weight: 400;
-}
-
-/* Grid Nav Button */
-.grid-nav-btn {
-    position: absolute;
-    top: 50%;
-    right: -20px;
-    transform: translateY(-50%);
-    width: 40px;
-    height: 40px;
-    background: #fff;
-    border: 1px solid var(--color-border);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    z-index: 10;
-    color: #333;
-}
-
 /* 7. NEW RELEASE SLIDER (선 출간 신작) */
 .new-release-slider-container {
     position: relative;
@@ -396,3 +189,71 @@
     font-weight: 700;
     color: var(--color-text-light);
 }
+
+/* 10. 우주라이크 소설 (새로운 클래스) */
+.wouldyou-section {
+    margin-top: 50px;
+    padding-bottom: 50px;
+}
+.wouldyou-slider-container {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+.wouldyou-list {
+    display: flex;
+    gap: 16px;
+    transition: transform 0.4s ease-in-out;
+}
+.wouldyou-item {
+    width: calc(20% - 12.8px); /* 5 items visible */
+    flex-shrink: 0;
+    height: 380px;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.wouldyou-item a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.wouldyou-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.2s ease;
+}
+.wouldyou-item:hover .wouldyou-cover {
+    transform: scale(1.05);
+}
+.wouldyou-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 24px 12px;
+    text-align: center;
+    color: #fff;
+    pointer-events: none;
+}
+.wouldyou-title {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    line-height: 1.3;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+.wouldyou-author {
+    font-size: 13px;
+    opacity: 0.9;
+    font-weight: 500;
+}
+
