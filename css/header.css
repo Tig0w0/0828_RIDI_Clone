@@ -1,0 +1,123 @@
+/* HEADER */
+.header {
+    height: 116;
+    border-bottom: 1px solid var(--color-border);
+}
+.header-top {}
+.header-top-inner {
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.logo a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+.header-top-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.search-bar {
+    width: 260px;
+    height: 40px;
+    background-color: var(--color-bg-gray);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    gap: 8px;
+    margin-left: 20px;
+}
+.search-bar input {
+    border: none;
+    background: transparent;
+    width: 100%;
+    font-size: 14px;
+    color: var(--color-text-main);
+    outline: none;
+}
+.user-utils .btn-login {
+    font-size: 13px;
+    font-weight: 600;
+    color: #666;
+    text-decoration: none;
+}
+/* HEADER BOTTOM (Nav) */
+.header-bottom-inner {
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.main-nav .nav-list {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.nav-list li a {
+    display: flex;
+    align-items: center;
+    padding: 16px 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-text-main);
+    text-decoration: none;
+}
+.nav-list li.active a {
+    color: var(--color-primary);
+}
+.badge-n {
+    display: inline-block;
+    background: var(--color-primary);
+    color: #fff;
+    font-size: 9px;
+    font-weight: 800;
+    padding: 1px 3px;
+    border-radius: 3px;
+    margin-left: 4px;
+    vertical-align: top;
+    margin-top: 2px;
+}
+.nav-right {
+    display: flex;
+    gap: 16px;
+}
+.btn-icon {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-sub);
+    text-decoration: none;
+}
+/* LNB */
+.lnb-wrapper {
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding: 16px 16px;
+}
+.lnb-list {
+    display: flex;
+    gap: 16px;
+}
+.lnb-list li a {
+    display: block;
+    padding: 6px 14px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text-main);
+    border-radius: 20px;
+    text-decoration: none;
+}
+.lnb-list li.active a {
+    background-color: var(--color-primary);
+    color: #fff;
+}

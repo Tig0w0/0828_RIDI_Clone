@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리디 - 도서 추천 페이지 클론</title>
+    <!-- 폰트 적용 (프리텐다드) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <!-- CSS 연결 -->
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/style.css?v=3">
+</head>
+<body>
+    <header class="header">
+        <div class="header-top">
+            <div class="header-top-inner">
+                <h1 class="logo">
+                    <a href="#">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 66 25" width="66" height="25"><path fill="#1E9EFF" d="M20.29 8.281v.063c0 3.306-1.612 5.8-4.546 7.08l5.608 8.155h-6.8l-4.778-7.097H5.787v7.102H0V.52h11.444c5.457 0 8.846 2.974 8.846 7.76m-9.167 3.454c2.076 0 3.317-1.45 3.317-3.138v-.062c0-2.258-1.853-3.17-3.411-3.17H5.787v6.37zM24.37.52h5.786v23.063h-5.786zm20.668 0H34.39v23.063h10.65c7.117 0 10.73-4.85 10.73-11.53v-.061C55.77 5.343 52.156.52 45.04.52m4.724 11.592c0 3.697-1.63 6.448-5.384 6.448h-4.202V5.54h4.202c3.755 0 5.385 2.774 5.385 6.511zM58.94.52h5.786v23.063H58.94z"></path></svg>
+                    </a>
+                </h1>
+                <div class="header-top-right">
+                    <div class="search-bar">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.156 16.593c3.555 0 6.438-2.883 6.438-6.437S13.711 3.719 10.156 3.719c-3.555 0-6.438 2.883-6.438 6.437 0 3.554 2.883 6.437 6.438 6.437Zm8.736.335L22.95 21l-1.414 1.414-4.057-4.058a8.437 8.437 0 1 1 1.414-1.428Z" fill="#a6a6a6"></path></svg>
+                        <input type="text" placeholder="">
+                    </div>
+                    <div class="user-utils">
+                        <a href="#" class="btn-login">로그인 / 회원가입</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="header-bottom">
+            <div class="header-bottom-inner">
+                <nav class="main-nav">
+                    <ul class="nav-list">
+                        <li><a href="#">만화</a></li>
+                        <li><a href="#">웹툰</a></li>
+                        <li><a href="#">웹소설</a></li>
+                        <li class="active"><a href="#">도서</a></li>
+                        <li><a href="#">리디샵<span class="badge-n">N</span></a></li>
+                        <li>
+                            <a href="#">셀렉트
+                                <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" style="margin-left: 2px;"><path fill-rule="evenodd" clip-rule="evenodd" d="M11 5h1v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3v1H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V5Zm2.854-3.146L11 4.707 10.293 4l2.853-2.854L11 1V0h4v4h-1V1.854Z"></path></svg>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="nav-right">
+                    <button class="btn-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.3" d="M4.5 7h15M4.5 12h15M4.5 17h15"></path></svg>
+                        전체 카테고리
+                    </button>
+                    <button class="btn-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.4"></circle><path fill="currentColor" d="M9.75 12.1a2.28 2.28 0 0 1 2.292-2.267c.626 0 1.192.248 1.605.65a.65.65 0 1 0 .906-.933 3.6 3.6 0 0 0-2.511-1.017c-1.979 0-3.592 1.592-3.592 3.567s1.614 3.567 3.592 3.567c.976 0 1.862-.387 2.51-1.015a.65.65 0 1 0-.906-.933 2.3 2.3 0 0 1-1.604.648A2.28 2.28 0 0 1 9.75 12.1"></path></svg>
+                        캐시충전
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="lnb-wrapper">
+        <div class="lnb-inner">
+            <ul class="lnb-list">
+                <li class="active"><a href="#">추천</a></li>
+                <li><a href="#">기획전</a></li>
+                <li><a href="#">소설</a></li>
+                <li><a href="#">인문/사회/역사</a></li>
+                <li><a href="#">경영/경제</a></li>
+                <li><a href="#">자기계발</a></li>
+                <li><a href="#">에세이/시</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <!-- 1. Hero Banner Slider -->
+        <section id="hero-slider-section" class="slider-section">
+            <div class="slider-viewport">
+                <div class="slider-container" id="hero-slider-container">
+                    <!-- Data will be injected here via JS -->
+                </div>
+            </div>
+            <!-- Slider Controls -->
+            <button id="btn-prev" class="slider-btn prev">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.362 14.229c.273-.273.273-.716 0-.99L5.123 8l5.239-5.239c.273-.273.273-.716 0-.989-.273-.274-.716-.274-.99 0L3.64 7.506c-.273.273-.273.716 0 .989l5.733 5.734c.274.273.717.273.99 0z"></path></svg>
+            </button>
+            <button id="btn-next" class="slider-btn next">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.638 14.229c-.273-.273-.273-.716 0-.99L10.877 8 5.638 2.761c-.273-.273-.273-.716 0-.989.273-.274.716-.274.99 0l5.732 5.734c.273.273.273.716 0 .989l-5.732 5.734c-.274.273-.717.273-.99 0z"></path></svg>
+            </button>
+        </section>
+
+        <!-- 2. 퀵 메뉴 -->
+        <section class="quick-menu-section">
+            <ul class="quick-menu-list">
+                <li class="quick-menu-item">
+                    <a href="#">
+                        <img src="img/menu_icon/ridi_shop.webp" alt="리디샵">
+                        <span>리디샵</span>
+                    </a>
+                </li>
+                <li class="quick-menu-item">
+                    <a href="#">
+                        <img src="img/menu_icon/new.webp" alt="신간">
+                        <span>신간</span>
+                    </a>
+                </li>
+                <li class="quick-menu-item">
+                    <a href="#">
+                        <img src="img/menu_icon/best.webp" alt="북스 베스트">
+                        <span>북스 베스트</span>
+                    </a>
+                </li>
+                <li class="quick-menu-item">
+                    <a href="#">
+                        <img src="img/menu_icon/event.webp" alt="이벤트">
+                        <span>이벤트</span>
+                    </a>
+                </li>
+                <li class="quick-menu-item">
+                    <a href="#">
+                        <img src="img/menu_icon/only.webp" alt="리디온리">
+                        <span>리디온리</span>
+                    </a>
+                </li>
+                <li class="quick-menu-item">
+                    <a href="#">
+                        <img src="img/menu_icon/coupon.webp" alt="이달의 쿠폰">
+                        <span>이달의 쿠폰</span>
+                    </a>
+                </li>
+                <li class="quick-menu-item">
+                    <a href="#">
+                        <img src="img/menu_icon/rental.webp" alt="대여">
+                        <span>대여</span>
+                    </a>
+                </li>
+                <li class="quick-menu-item">
+                    <a href="#">
+                        <img src="img/menu_icon/event.webp" alt="혜택 모아봄">
+                        <span>혜택 모아봄</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 3. 지금 많이 읽고 있는 작품 (그리드 리스트) -->
+        <section class="book-list-section">
+            <div class="section-header">
+                <h2>지금 많이 읽고 있는 작품</h2>
+            </div>
+            <div class="book-grid-container">
+                <ol class="book-grid" id="now-reading-list">
+                    <!-- Data will be injected here via JS -->
+                </ol>
+                <button class="grid-nav-btn next">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.638 14.229c-.273-.273-.273-.716 0-.99L10.877 8 5.638 2.761c-.273-.273-.273-.716 0-.989.273-.274.716-.274.99 0l5.732 5.734c.273.273.273.716 0 .989l-5.732 5.734c-.274.273-.717.273-.99 0z"></path></svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- 4. 오늘, 리디의 발견 -->
+        <section class="book-list-section">
+            <div class="section-header">
+                <h2>오늘, 리디의 발견</h2>
+            </div>
+            <div class="discovery-slider-container">
+                <ol class="discovery-list" id="discovery-list">
+                    <!-- Data will be injected here via JS -->
+                </ol>
+                <button class="grid-nav-btn next">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.638 14.229c-.273-.273-.273-.716 0-.99L10.877 8 5.638 2.761c-.273-.273-.273-.716 0-.989.273-.274.716-.274.99 0l5.732 5.734c.273.273.273.716 0 .989l-5.732 5.734c-.274.273-.717.273-.99 0z"></path></svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- 5. 이벤트 -->
+        <section class="book-list-section">
+            <div class="section-header">
+                <h2>이벤트</h2>
+                <a href="#" class="btn-more">더보기</a>
+            </div>
+            <div class="event-grid" id="event-list">
+                <!-- Data will be injected here via JS -->
+            </div>
+        </section>
+
+        <!-- 6. 베스트 -->
+        <section class="book-list-section">
+            <div class="section-header">
+                <h2>베스트</h2>
+                <a href="#" class="btn-more">더보기</a>
+            </div>
+            <div class="book-grid-container">
+                <ol class="book-grid" id="best-list">
+                    <!-- Data will be injected here via JS -->
+                </ol>
+            </div>
+        </section>
+
+        <!-- 7. 지금, 리디에서만! 선 출간 신작 -->
+        <section class="book-list-section">
+            <div class="section-header">
+                <h2>지금, 리디에서만! 선 출간 신작</h2>
+            </div>
+            <div class="new-release-slider-container">
+                <div class="new-release-viewport">
+                    <ul class="new-release-list" id="new-release-list">
+                        <!-- Data will be injected here via JS -->
+                    </ul>
+                </div>
+                <button class="slider-btn prev" id="new-release-prev" style="display: none;">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.362 14.229c.273-.273.273-.716 0-.99L5.123 8l5.239-5.239c.273-.273.273-.716 0-.989-.273-.274-.716-.274-.99 0l-5.732 5.734c-.273.273-.273.716 0 .989l5.732 5.734c.274.273.717.273.99 0z"></path></svg>
+                </button>
+                <button class="slider-btn next" id="new-release-next">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.638 14.229c-.273-.273-.273-.716 0-.99L10.877 8 5.638 2.761c-.273-.273-.273-.716 0-.989.273-.274.716-.274.99 0l5.732 5.734c.273.273.273.716 0 .989l-5.732 5.734c-.274.273-.717.273-.99 0z"></path></svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- 8. 새로 나온 작품 -->
+        <section class="book-list-section">
+            <div class="section-header">
+                <h2>새로 나온 작품</h2>
+                <a href="#" class="btn-more">더보기</a>
+            </div>
+            <div class="discovery-slider-container">
+                <ol class="discovery-list" id="new-works-list">
+                    <!-- Data will be injected here via JS -->
+                </ol>
+                <button class="grid-nav-btn next">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.638 14.229c-.273-.273-.273-.716 0-.99L10.877 8 5.638 2.761c-.273-.273-.273-.716 0-.989.273-.274.716-.274.99 0l5.732 5.734c.273.273.273.716 0 .989l-5.732 5.734c-.274.273-.717.273-.99 0z"></path></svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- 9. 오디세이랑 함께 보면 좋아요! -->
+        <section class="book-list-section">
+            <div class="section-header">
+                <h2>오디세이랑 함께 보면 좋아요!</h2>
+                <a href="#" class="btn-more">더보기</a>
+            </div>
+            <div class="discovery-slider-container">
+                <ol class="discovery-list" id="odyssey-list">
+                    <!-- Data will be injected here via JS -->
+                </ol>
+                <button class="grid-nav-btn next">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.638 14.229c-.273-.273-.273-.716 0-.99L10.877 8 5.638 2.761c-.273-.273-.273-.716 0-.989.273-.274.716-.274.99 0l5.732 5.734c.273.273.273.716 0 .989l-5.732 5.734c-.274.273-.717.273-.99 0z"></path></svg>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="footer-top">
+            <div class="footer-inner">
+                <div class="footer-menus">
+                    <div class="footer-menu-group cs-group">
+                        <a href="#">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg> 
+                            고객센터
+                        </a>
+                        <a href="#">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg> 
+                            공지사항
+                        </a>
+                    </div>
+                    <div class="footer-menu-group">
+                        <strong>서비스</strong>
+                        <ul>
+                            <li><a href="#">제휴카드</a></li>
+                            <li><a href="#">뷰어 다운로드</a></li>
+                            <li><a href="#">CP사이트</a></li>
+                            <li><a href="#">리디바탕</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-menu-group">
+                        <strong>기타 문의</strong>
+                        <ul>
+                            <li><a href="#">원고 투고</a></li>
+                            <li><a href="#">사업 제휴 문의</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-menu-group">
+                        <strong>회사</strong>
+                        <ul>
+                            <li><a href="#">회사 소개</a></li>
+                            <li><a href="#">인재채용 <span class="badge-blue">N</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-social">
+                    <a href="#" class="social-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="4" x2="20" y2="20"></line><line x1="20" y1="4" x2="4" y2="20"></line></svg>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-inner">
+                <div class="footer-info">
+                    <button class="btn-business-info">
+                        리디(주) 사업자 정보 
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <ul class="footer-terms">
+                        <li><a href="#">이용약관</a></li>
+                        <li><a href="#"><strong>개인정보 처리방침</strong></a></li>
+                        <li><a href="#">청소년보호정책</a></li>
+                        <li><a href="#">사업자정보확인</a></li>
+                    </ul>
+                    <p class="copyright">© RIDI Corp.</p>
+                </div>
+                <button class="btn-scroll-top">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 자바스크립트 연결 -->
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+/* 8. FOOTER */
+.footer {
+    border-top: 1px solid var(--color-border);
+    margin-top: 60px;
+    padding: 40px 0;
+    color: var(--color-text-light);
+    font-size: 13px;
+    background: #fff;
+}
+.footer-inner {
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+}
+.footer-menus {
+    display: flex;
+    gap: 80px;
+}
+.footer-menu-group {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.cs-group {
+    gap: 20px;
+    margin-right: 40px;
+}
+.cs-group a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text-main);
+}
+.footer-menu-group strong {
+    font-weight: 700;
+    color: var(--color-text-main);
+    margin-bottom: 4px;
+}
+.footer-menu-group ul {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.footer-menu-group a {
+    color: var(--color-text-light);
+    text-decoration: none;
+}
+.badge-blue {
+    background: #1f8ce6;
+    color: #fff;
+    font-size: 10px;
+    padding: 2px 4px;
+    border-radius: 50%;
+    margin-left: 4px;
+}
+.footer-social {
+    display: flex;
+    gap: 12px;
+}
+.social-icon {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--color-text-light);
+    text-decoration: none;
+}
+.footer-bottom {
+    border-top: 1px solid var(--color-border);
+    margin-top: 40px;
+    padding-top: 40px;
+}
+.footer-bottom .footer-inner {
+    align-items: flex-end;
+}
+.btn-business-info {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text-main);
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0;
+    margin-bottom: 12px;
+}
+.footer-terms {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+.footer-terms li {
+    position: relative;
+}
+.footer-terms li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    right: -7px;
+    top: 3px;
+    width: 1px;
+    height: 10px;
+    background: var(--color-border);
+}
+.footer-terms a {
+    color: var(--color-text-light);
+    text-decoration: none;
+}
+.footer-terms strong {
+    font-weight: 700;
+    color: var(--color-text-main);
+}
+.copyright {
+    color: var(--color-text-light);
+}
+.btn-scroll-top {
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
