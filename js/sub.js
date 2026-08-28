@@ -34,7 +34,7 @@ const authorProfileData = {
         edu: '캘리포니아 대학교 샌디에이고캠퍼스 컴퓨터공학 학사',
         career: '산디아 국립연구소 컴퓨터 프로그래머',
         debut: '소설 \'마션\'',
-        link: '<a href="#" class="author-link">공식 사이트</a> <span class="link-divider">|</span> <a href="#" class="author-link">트위터</a>',
+        link: '<a href="index.html" class="author-link">공식 사이트</a> <span class="link-divider">|</span> <a href="index.html" class="author-link">트위터</a>',
         date: '2018.12.03 업데이트'
     },
     'translator': {
@@ -315,11 +315,11 @@ async function searchCoverFromKakao(title) {
         if (doc && doc.thumbnail) {
             coverImg.src = doc.thumbnail;
         } else {
-            coverImg.src = "https://img.ridicdn.net/cover/510001099/xxlarge#1"; 
+            coverImg.src = "img/book_book_images/project_hail_mary.webp"; 
         }
     } catch (e) {
         console.error(e);
-        document.getElementById('detail-cover').src = "https://img.ridicdn.net/cover/510001099/xxlarge#1";
+        document.getElementById('detail-cover').src = "img/book_book_images/project_hail_mary.webp";
     }
 }
 
@@ -348,7 +348,7 @@ async function fetchSidebarBest(query, elementId) {
             return `
                 <li class="sidebar-best-item">
                     <span class="sidebar-best-rank" style="color: ${color};">${rank}</span>
-                    <a href="#" class="sidebar-best-title">${doc.title}</a>
+                    <a href="index.html" class="sidebar-best-title">${doc.title}</a>
                 </li>
             `;
         }).join('');
@@ -372,16 +372,16 @@ async function fetchAuthorWorks() {
         const list = document.getElementById("author-works-list");
         if (!list) return;
 
-        list.innerHTML = data.documents.map((doc, index) => {
+        list.innerHTML = data.documents.filter(doc => doc.thumbnail).map((doc, index) => {
             const authors = doc.authors.join(', ');
             let ronlyBadge = index === 0 ? '<div class="ronly-badge">R ONLY</div>' : ''; // 첫번째 항목에만 임의 배치
             
             return `
             <div class="discovery-item">
-                <a href="#">
+                <a href="index.html">
                     <div class="discovery-cover-wrapper">
                         ${ronlyBadge}
-                        <img src="${doc.thumbnail || 'https://via.placeholder.com/120x174'}" alt="${doc.title}" class="discovery-cover">
+                        <img src="${doc.thumbnail}" alt="${doc.title}" class="discovery-cover">
                     </div>
                     <div class="discovery-text" style="margin-top: 8px;">
                         <span class="discovery-title">${doc.title}</span>
@@ -510,7 +510,7 @@ async function fetchSeriesWorks() {
         let seriesBooks = [];
         
         for (let target of targetTitles) {
-            const found = data.documents.find(doc => doc.title.includes(target));
+            const found = data.documents.find(doc => doc.title.includes(target) && doc.thumbnail);
             if (found) seriesBooks.push(found);
         }
 
@@ -522,9 +522,9 @@ async function fetchSeriesWorks() {
             
             return `
             <div class="discovery-item">
-                <a href="#">
+                <a href="index.html">
                     <div class="discovery-cover-wrapper">
-                        <img src="${doc.thumbnail || 'https://via.placeholder.com/120x174'}" alt="${doc.title}" class="discovery-cover">
+                        <img src="${doc.thumbnail}" alt="${doc.title}" class="discovery-cover">
                     </div>
                     <div class="discovery-text">
                         <span class="discovery-title" style="font-size: 16px; margin-bottom: 4px; white-space: normal; line-height: 1.4;">${doc.title}</span>
@@ -570,9 +570,9 @@ async function fetchAndRenderBooks(query, targetId, count = 6) {
             
             return `
             <div class="discovery-item">
-                <a href="#">
+                <a href="index.html">
                     <div class="discovery-cover-wrapper">
-                        <img src="${doc.thumbnail || 'https://via.placeholder.com/120x174'}" alt="${doc.title}" class="discovery-cover">
+                        <img src="${doc.thumbnail}" alt="${doc.title}" class="discovery-cover">
                     </div>
                     <div class="discovery-text">
                         <span class="discovery-title" style="font-size: 16px; margin-bottom: 4px; white-space: normal; line-height: 1.4;">${doc.title}</span>

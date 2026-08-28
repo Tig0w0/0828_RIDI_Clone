@@ -84,7 +84,7 @@ async function fetchMainBanners() {
             
             return {
                 id: index + 1,
-                coverUrl: doc.coverUrl || 'https://via.placeholder.com/140x200?text=No+Image',
+                coverUrl: doc.coverUrl,
                 title: doc.title,
                 subTitle: doc.subTitle,
                 badge: badgeText,
@@ -131,7 +131,7 @@ async function fetchKakaoBooks(query) {
             
             return {
                 id: index + 1,
-                coverUrl: doc.thumbnail ? doc.thumbnail : 'https://via.placeholder.com/140x200?text=No+Image',
+                coverUrl: doc.thumbnail,
                 title: doc.title,
                 author: doc.authors.length > 0 ? doc.authors[0] : "작자미상",
                 rating: mockRating,
@@ -155,7 +155,7 @@ function renderHeroBanners(banners) {
     container.innerHTML = banners.map(banner => {
         if (banner.type === 'full') {
             return `
-        <div class="slider-slide" style="background-image: url('${banner.coverUrl}'); background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 30px; text-align: center; color: white; border-radius: 12px; position: relative; z-index: 1;">
+        <a href="sub.html" class="slider-slide" style="background-image: url('${banner.coverUrl}'); background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 30px; text-align: center; color: white; border-radius: 12px; position: relative; z-index: 1; text-decoration: none;">
             <!-- 어두운 오버레이를 추가해 텍스트 가독성 확보 -->
             <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(0,0,0,0.6) 100%); border-radius: 12px; z-index: -1;"></div>
             <div class="slider-content" style="width: 100%; padding: 0 24px;">
@@ -163,12 +163,12 @@ function renderHeroBanners(banners) {
                 <h2 style="font-size: 18px; margin-bottom: 6px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${banner.title}</h2>
                 <p style="font-size: 14px; opacity: 0.8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${banner.subTitle}</p>
             </div>
-        </div>
+        </a>
             `;
         }
         
         return `
-        <div class="slider-slide" style="background-color: ${banner.bgColor}; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 30px; text-align: center; color: white; border-radius: 12px;">
+        <a href="sub.html" class="slider-slide" style="background-color: ${banner.bgColor}; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 30px; text-align: center; color: white; border-radius: 12px; text-decoration: none;">
             <!-- 책 표지 영역 -->
             <div style="margin-bottom: 24px; box-shadow: 0 8px 16px rgba(0,0,0,0.4); border-radius: 4px; overflow: hidden; width: 140px; height: 200px;">
                 <img src="${banner.coverUrl}" alt="cover" style="width: 100%; height: 100%; object-fit: cover;">
@@ -179,7 +179,7 @@ function renderHeroBanners(banners) {
                 <h2 style="font-size: 18px; margin-bottom: 6px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${banner.title}</h2>
                 <p style="font-size: 14px; opacity: 0.8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${banner.subTitle}</p>
             </div>
-        </div>
+        </a>
         `;
     }).join('');
 
@@ -198,7 +198,7 @@ function renderReadingBooks(books) {
 
     list.innerHTML = pageBooks.map(book => `
         <li class="book-grid-item">
-            <a href="#">
+            <a href="sub.html">
                 <div class="book-cover-wrapper">
                     <img src="${book.coverUrl}" alt="${book.title}" class="book-cover">
                 </div>
@@ -239,9 +239,9 @@ async function fetchKakaoDiscoveryList(query, listId) {
             const rating = Math.random() > 0.5 ? 0 : (Math.random() * 1 + 4).toFixed(1);
             return `
             <li class="discovery-item">
-                <a href="#">
+                <a href="sub.html">
                     <div class="discovery-cover-wrapper">
-                        <img src="${doc.thumbnail ? doc.thumbnail : 'https://via.placeholder.com/150x200'}" alt="${doc.title}" class="discovery-cover">
+                        <img src="${doc.thumbnail}" alt="${doc.title}" class="discovery-cover">
                         <span class="discovery-badge">10%</span>
                     </div>
                     <div class="discovery-text">
@@ -279,11 +279,11 @@ async function fetchKakaoEvents(query) {
         const validDocs = getUniqueBooks(data.documents, 3);
 
         list.innerHTML = validDocs.map((doc, idx) => `
-            <a href="#" class="event-item" style="background-color: ${colors[idx % colors.length]};">
+            <a href="sub.html" class="event-item" style="background-color: ${colors[idx % colors.length]};">
                 <div class="event-info">
                     <span>${doc.title}</span>
                 </div>
-                <img src="${doc.thumbnail ? doc.thumbnail : 'https://via.placeholder.com/50x75'}" alt="${doc.title}" class="event-cover">
+                <img src="${doc.thumbnail}" alt="${doc.title}" class="event-cover">
             </a>
         `).join('');
     } catch (e) {
@@ -311,9 +311,9 @@ async function fetchKakaoBest(query) {
             const reviewCount = Math.floor(Math.random() * 500) + 10;
             return `
             <li class="book-grid-item">
-                <a href="#">
+                <a href="sub.html">
                     <div class="book-cover-wrapper">
-                        <img src="${doc.thumbnail || 'https://via.placeholder.com/120x174'}" alt="${doc.title}" class="book-cover">
+                        <img src="${doc.thumbnail}" alt="${doc.title}" class="book-cover">
                     </div>
                     <div class="book-rank">${idx + 1}</div>
                     <div class="book-info">
@@ -564,8 +564,10 @@ function bindSliderEvents(list) {
         nextBtn.addEventListener('click', () => {
             const firstItem = list.firstElementChild;
             if (!firstItem) return;
-            const itemWidth = firstItem.offsetWidth + 16;
-            list.scrollBy({ left: itemWidth * 5, behavior: 'smooth' });
+            const gap = parseInt(window.getComputedStyle(list).columnGap) || 16;
+            const itemWidth = firstItem.offsetWidth + gap;
+            // 3칸 단위(현재 보여지는 화면 단위) 스크롤
+            list.scrollBy({ left: itemWidth * 3, behavior: 'smooth' });
         });
     }
 
@@ -573,11 +575,13 @@ function bindSliderEvents(list) {
         prevBtn.addEventListener('click', () => {
             const firstItem = list.firstElementChild;
             if (!firstItem) return;
-            const itemWidth = firstItem.offsetWidth + 16;
-            list.scrollBy({ left: -itemWidth * 5, behavior: 'smooth' });
+            const gap = parseInt(window.getComputedStyle(list).columnGap) || 16;
+            const itemWidth = firstItem.offsetWidth + gap;
+            list.scrollBy({ left: -itemWidth * 3, behavior: 'smooth' });
         });
     }
 
-    // 렌더링 직후 초기화
-    setTimeout(updateButtons, 100);
+    // 렌더링 직후 초기화 (이미지 로딩 등으로 인한 너비 계산 지연 대비 넉넉한 딜레이)
+    setTimeout(updateButtons, 300);
+    window.addEventListener('resize', updateButtons);
 }
