@@ -155,7 +155,7 @@ function renderHeroBanners(banners) {
     container.innerHTML = banners.map(banner => {
         if (banner.type === 'full') {
             return `
-        <a href="sub.html" class="slider-slide" style="background-image: url('${banner.coverUrl}'); background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 30px; text-align: center; color: white; border-radius: 12px; position: relative; z-index: 1; text-decoration: none;">
+        <a href="#" class="slider-slide" style="background-image: url('${banner.coverUrl}'); background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 30px; text-align: center; color: white; border-radius: 12px; position: relative; z-index: 1; text-decoration: none;">
             <!-- 어두운 오버레이를 추가해 텍스트 가독성 확보 -->
             <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(0,0,0,0.6) 100%); border-radius: 12px; z-index: -1;"></div>
             <div class="slider-content" style="width: 100%; padding: 0 24px;">
@@ -168,7 +168,7 @@ function renderHeroBanners(banners) {
         }
         
         return `
-        <a href="sub.html" class="slider-slide" style="background-color: ${banner.bgColor}; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 30px; text-align: center; color: white; border-radius: 12px; text-decoration: none;">
+        <a href="#" class="slider-slide" style="background-color: ${banner.bgColor}; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 30px; text-align: center; color: white; border-radius: 12px; text-decoration: none;">
             <!-- 책 표지 영역 -->
             <div style="margin-bottom: 24px; box-shadow: 0 8px 16px rgba(0,0,0,0.4); border-radius: 4px; overflow: hidden; width: 140px; height: 200px;">
                 <img src="${banner.coverUrl}" alt="cover" style="width: 100%; height: 100%; object-fit: cover;">
@@ -198,7 +198,7 @@ function renderReadingBooks(books) {
 
     list.innerHTML = pageBooks.map(book => `
         <li class="book-grid-item">
-            <a href="sub.html">
+            <a href="sub.html?title=${encodeURIComponent(book.title)}">
                 <div class="book-cover-wrapper">
                     <img src="${book.coverUrl}" alt="${book.title}" class="book-cover">
                 </div>
@@ -239,7 +239,7 @@ async function fetchKakaoDiscoveryList(query, listId) {
             const rating = Math.random() > 0.5 ? 0 : (Math.random() * 1 + 4).toFixed(1);
             return `
             <li class="discovery-item">
-                <a href="sub.html">
+                <a href="sub.html?title=${encodeURIComponent(doc.title)}">
                     <div class="discovery-cover-wrapper">
                         <img src="${doc.thumbnail}" alt="${doc.title}" class="discovery-cover">
                         <span class="discovery-badge">10%</span>
@@ -279,7 +279,7 @@ async function fetchKakaoEvents(query) {
         const validDocs = getUniqueBooks(data.documents, 3);
 
         list.innerHTML = validDocs.map((doc, idx) => `
-            <a href="sub.html" class="event-item" style="background-color: ${colors[idx % colors.length]};">
+            <a href="sub.html?title=${encodeURIComponent(doc.title)}" class="event-item" style="background-color: ${colors[idx % colors.length]};">
                 <div class="event-info">
                     <span>${doc.title}</span>
                 </div>
@@ -311,7 +311,7 @@ async function fetchKakaoBest(query) {
             const reviewCount = Math.floor(Math.random() * 500) + 10;
             return `
             <li class="book-grid-item">
-                <a href="sub.html">
+                <a href="sub.html?title=${encodeURIComponent(doc.title)}">
                     <div class="book-cover-wrapper">
                         <img src="${doc.thumbnail}" alt="${doc.title}" class="book-cover">
                     </div>
@@ -347,7 +347,7 @@ async function fetchLocalNewRelease() {
 
         list.innerHTML = data.map((doc, idx) => `
             <li class="new-release-item">
-                <a href="${doc.link || '#'}">
+                <a href="${doc.link}?title=${encodeURIComponent(doc.title)}">
                     <div class="new-release-bg" style="background-color: ${doc.bgColor || '#1a7c3a'};">
                         <img src="${doc.coverUrl}" alt="${doc.title}" class="new-release-cover">
                     </div>
@@ -486,7 +486,7 @@ async function fetchWouldYouLike() {
         
         list.innerHTML = data.map(doc => `
             <li class="wouldyou-item" style="background-color: ${doc.bgColor};">
-                <a href="${doc.link}">
+                <a href="${doc.link}?title=${encodeURIComponent(doc.title)}">
                     <img src="${doc.coverUrl}" alt="${doc.title}" class="wouldyou-cover">
                     <div class="wouldyou-overlay">
                         <h3 class="wouldyou-title">${doc.title}</h3>
@@ -510,7 +510,7 @@ async function fetchRidiOnly() {
         
         list.innerHTML = data.map(doc => `
             <li class="discovery-item">
-                <a href="${doc.link}">
+                <a href="${doc.link}?title=${encodeURIComponent(doc.title)}">
                     <div class="discovery-cover-wrapper">
                         <img src="${doc.coverUrl}" alt="${doc.title}" class="discovery-cover">
                         ${doc.onlyBadge ? '<span class="ronly-badge">R ONLY</span>' : ''}

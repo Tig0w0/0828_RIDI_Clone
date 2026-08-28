@@ -222,104 +222,134 @@ function extractSection(text, title) {
 
 async function fetchBookDetail() {
     try {
-        const response = await fetch('./data/book_detail.json');
-        if (!response.ok) throw new Error('Failed to load book_detail.json');
-        const data = await response.json();
-
-        // 1. 기본 정보 채우기
-        const categoryStr = "소설 > SF 소설 > 소설 > 영미소설";
-        document.getElementById('detail-category').innerText = categoryStr;
+        const urlParams = new URLSearchParams(window.location.search);
+        let bookTitle = urlParams.get('title');
         
-        // 제목 바인딩 2군데
-        document.getElementById('detail-title').innerText = data.title;
-        const subTitleEl = document.getElementById('book-title-sub');
-        if(subTitleEl) subTitleEl.innerText = data.title;
-
-        // 평점
-        document.getElementById('detail-score').innerText = data.grade;
-        document.getElementById('detail-count').innerText = `(${data.grade_count}명)`;
-
-        // 저자 및 출판사
-        document.getElementById('detail-author-publisher').innerHTML = 
-            `<b>${data.author}</b> 저자 | <b>${data.translator}</b> 번역<br>${data.publisher} 출판`;
-
-        // 작품 소개 파싱
-        if (data.description) {
-            const rawDesc = data.description;
-            tabData.desc = extractSection(rawDesc, '책소개') || rawDesc.replace(/\n/g, '<br>');
-            tabData.review = extractSection(rawDesc, '출판사 서평');
-            tabData.toc = extractSection(rawDesc, '목차');
-            tabData.author_intro = extractSection(rawDesc, '저자 소개');
-
-            // 탭 초기값(작품 소개) 렌더링
-            document.getElementById('detail-description').innerHTML = tabData.desc;
-        }
-
-        // 2. 부가 정보 (회색 박스) 채우기
-        if(data.publish_date) document.getElementById('meta-publish').innerText = data.publish_date;
-        if(data.file_info) document.getElementById('meta-file').innerText = data.file_info;
-        if(data.isbn) document.getElementById('meta-isbn').innerText = data.isbn;
-        
-        if(data.support_tts) {
-            const svgTTS = `<svg aria-label="TTS(듣기) 지원" fill="none" height="18" viewBox="0 0 18 18" width="18" xmlns="http://www.w3.org/2000/svg" style="vertical-align: text-bottom;"><path clip-rule="evenodd" d="M2.4375 8.73453V9.67578H2.44212C2.43906 9.70808 2.4375 9.74081 2.4375 9.7739V14.287C2.4375 14.855 2.89801 15.3155 3.46607 15.3155H6.03763C6.60569 15.3155 7.0662 14.855 7.0662 14.287V9.7739C7.0662 9.20584 6.60569 8.74533 6.03763 8.74533H3.72V8.73453C3.72 5.82054 6.08226 3.45828 8.99625 3.45828C11.9102 3.45828 14.2725 5.82054 14.2725 8.73453V8.74533H11.9598C11.3918 8.74533 10.9313 9.20584 10.9313 9.7739V14.287C10.9313 14.855 11.3918 15.3155 11.9598 15.3155H14.5314C15.0994 15.3155 15.56 14.855 15.56 14.287V9.7739C15.56 9.73961 15.5583 9.70571 15.555 9.67228V8.73453C15.555 5.11223 12.6185 2.17578 8.99625 2.17578C5.37395 2.17578 2.4375 5.11223 2.4375 8.73453ZM3.72321 10.031V14.0298H5.78048V10.031H3.72321ZM12.217 14.0298V10.031H14.2742V14.0298H12.217Z" fill="#787878" fill-rule="evenodd"></path></svg>`;
-            document.getElementById('meta-tts').innerHTML = `<span style="display:inline-flex;align-items:center;gap:4px;color:#787878;">${svgTTS} TTS(듣기) 지원</span>`;
+        // title 파라미터가 없으면 기본값 사용
+        if (!bookTitle) {
+            bookTitle = "프로젝트 헤일메리";
         }
         
-        // 지원 기기 (배열 형태)
-        if(data.support_devices) {
-            const supportEl = document.getElementById('meta-support');
+        // 1. 로컬 JSON 데이터들에서 매칭되는 정보 찾기
+        let localData = null;
+        try {
+            const files = ['main.json', 'new_release.json', 'ridi_only.json', 'wouldyou_like.json'];
+            const fetchPromises = files.map(f => fetch(`./data/${f}`).then(r => r.json()));
+            const results = await Promise.all(fetchPromises);
             
-            const svgApp = `<svg aria-label="앱 지원" fill="none" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;"><path clip-rule="evenodd" d="M7.91564 2.57361C6.67024 2.57361 5.66064 3.5832 5.66064 4.82861V19.1715C5.66064 20.4169 6.67024 21.4265 7.91564 21.4265H16.0871C17.3325 21.4265 18.3421 20.4169 18.3421 19.1715V4.82861C18.3421 3.58321 17.3325 2.57361 16.0871 2.57361H7.91564ZM7.37064 4.82861C7.37064 4.52761 7.61465 4.28361 7.91564 4.28361H16.0871C16.3881 4.28361 16.6321 4.52761 16.6321 4.82861V19.1715C16.6321 19.4725 16.3881 19.7165 16.0871 19.7165H7.91564C7.61465 19.7165 7.37064 19.4725 7.37064 19.1715V4.82861ZM11.1429 16.6294C10.6707 16.6294 10.2879 17.0122 10.2879 17.4844C10.2879 17.9566 10.6707 18.3394 11.1429 18.3394H12.8572C13.3294 18.3394 13.7122 17.9566 13.7122 17.4844C13.7122 17.0122 13.3294 16.6294 12.8572 16.6294H11.1429Z" fill="currentColor" fill-rule="evenodd"></path></svg>`;
-            const svgPC = `<svg aria-label="PC뷰어 지원" fill="none" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;"><path clip-rule="evenodd" d="M2.56641 5.68073C2.56641 4.43414 3.57696 3.42358 4.82355 3.42358H19.1736C20.4201 3.42358 21.4307 4.43414 21.4307 5.68073V13.8607C21.4307 15.1073 20.4201 16.1179 19.1735 16.1179H12.8407C12.8515 16.1722 12.8571 16.2283 12.8571 16.2857V18.8572H15.0844C15.5577 18.8572 15.9415 19.2409 15.9415 19.7143C15.9415 20.1877 15.5577 20.5715 15.0844 20.5715H8.91293C8.43954 20.5715 8.05579 20.1877 8.05579 19.7143C8.05579 19.2409 8.43954 18.8572 8.91293 18.8572H11.1428V16.2857C11.1428 16.2283 11.1485 16.1722 11.1593 16.1179H4.82355C3.57696 16.1179 2.56641 15.1073 2.56641 13.8607V5.68073ZM4.82355 5.13787C4.52374 5.13787 4.28069 5.38091 4.28069 5.68073V13.8607C4.28069 14.1605 4.52374 14.4036 4.82355 14.4036H19.1735C19.4734 14.4036 19.7164 14.1605 19.7164 13.8607V5.68073C19.7164 5.38091 19.4734 5.13787 19.1736 5.13787H4.82355Z" fill="currentColor" fill-rule="evenodd"></path></svg>`;
-            const svgPaper = `<svg aria-label="PAPER 지원" fill="none" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;"><path clip-rule="evenodd" d="M14.0557 3.40002H15.77V3.40006H17.4571C18.7037 3.40006 19.7142 4.41062 19.7142 5.6572V18.2858C19.7142 19.5324 18.7037 20.5429 17.4571 20.5429H6.54279C5.2962 20.5429 4.28564 19.5324 4.28564 18.2858V5.6572C4.28564 4.41062 5.2962 3.40006 6.54279 3.40006H14.0557V3.40002ZM14.0557 5.11435H6.54279C6.24298 5.11435 5.99993 5.35739 5.99993 5.6572V18.2858C5.99993 18.5856 6.24298 18.8286 6.54279 18.8286H14.0557V17.9263V5.11435ZM15.77 18.8286H17.4571C17.7569 18.8286 17.9999 18.5856 17.9999 18.2858V5.6572C17.9999 5.35739 17.7569 5.11435 17.4571 5.11435H15.77V17.9263V18.8286Z" fill="currentColor" fill-rule="evenodd"></path></svg>`;
-            const svgWebNo = `<svg aria-label="웹 미지원" fill="none" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;"><path clip-rule="evenodd" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8 0-1.85.63-3.55 1.69-4.9L16.9 18.31C15.55 19.37 13.85 20 12 20zm6.31-3.1L7.1 5.69C8.45 4.63 10.15 4 12 4c4.41 0 8 3.59 8 8 0 1.85-.63 3.55-1.69 4.9z" fill="#ccc" fill-rule="evenodd"></path></svg>`;
+            const [mainData, newRelease, ridiOnly, wouldYouLike] = results;
             
-            supportEl.innerHTML = data.support_devices.map(dev => {
-                let icon = '';
-                let color = '#787878';
-                
-                if(dev.includes('앱')) icon = svgApp;
-                else if(dev.includes('PC')) icon = svgPC;
-                else if(dev.includes('PAPER')) icon = svgPaper;
-                else if(dev.includes('웹')) {
-                    icon = svgWebNo;
-                    color = '#ccc';
-                }
-                else icon = svgApp; 
-                
-                return `<span style="display:inline-flex;align-items:center;gap:4px;color:${color};">${icon} <span style="${color === '#ccc' ? 'text-decoration: line-through;' : ''}">${dev}</span></span>`;
-            }).join('<span style="color:#d1d5d9; margin: 0 6px;">|</span>');
+            // 모든 배열을 안전하게 하나로 모음
+            const allLocalBooks = [
+                ...(Array.isArray(mainData) ? mainData : []),
+                ...(Array.isArray(newRelease) ? newRelease : []),
+                ...(Array.isArray(ridiOnly) ? ridiOnly : []),
+                ...(Array.isArray(wouldYouLike) ? wouldYouLike : [])
+            ];
+            
+            localData = allLocalBooks.find(b => b.title && (b.title.includes(bookTitle) || bookTitle.includes(b.title)));
+        } catch(err) {
+            console.warn("로컬 JSON 데이터 검색 실패:", err);
         }
 
-        // 3. 커버 이미지 카카오 검색
-        searchCoverFromKakao(data.title);
-
-    } catch (e) {
-        console.error(e);
-    }
-}
-
-async function searchCoverFromKakao(title) {
-    try {
-        const query = encodeURIComponent(title);
+        // 2. 카카오 API 검색 (기본 뼈대 데이터용)
+        const query = encodeURIComponent(bookTitle);
         const url = `https://dapi.kakao.com/v3/search/book?query=${query}`;
         const response = await fetch(url, {
             headers: {
                 "Authorization": `KakaoAK ${KAKAO_API_KEY}`
             }
         });
-        const result = await response.json();
-        const doc = result.documents.find(d => d.thumbnail !== "");
         
-        const coverImg = document.getElementById('detail-cover');
-        if (doc && doc.thumbnail) {
-            coverImg.src = doc.thumbnail;
-        } else {
-            coverImg.src = "img/book_book_images/project_hail_mary.webp"; 
+        const result = await response.json();
+        const doc = result.documents ? (result.documents.find(d => d.thumbnail !== "") || result.documents[0]) : null;
+        
+        if (!doc && !localData) throw new Error('도서 정보를 찾을 수 없습니다.');
+
+        // 3. API 데이터와 JSON 데이터 병합 (JSON 데이터를 우선 적용하되, 배너 이미지는 책 표지로 쓰지 않음)
+        const isBanner = localData && localData.type;
+        const finalTitle = localData?.title || doc?.title || bookTitle;
+        const finalAuthors = doc?.authors?.length > 0 ? doc.authors.join(', ') : (localData?.author || '작자미상');
+        const finalTranslators = doc?.translators?.length > 0 ? doc.translators.join(', ') : '강동혁';
+        const finalPublisher = doc?.publisher || '알 수 없음';
+        
+        // 배너 데이터인 경우 가로로 긴 배경이 들어가는 것을 막기 위해 카카오 썸네일을 우선 사용
+        const finalCover = isBanner ? doc?.thumbnail : (localData?.coverUrl || doc?.thumbnail);
+        
+        const finalRating = localData?.rating || "4.9";
+        const finalReviewCount = localData?.reviewCount ? `(${localData.reviewCount}명)` : "(3,987명)";
+        const finalDesc = doc?.contents ? doc.contents + '...' : (localData?.desc || "상세 소개 정보가 없습니다.");
+        const finalSubTitle = localData?.subTitle || localData?.desc || finalTitle;
+
+        // 1. 기본 정보 채우기
+        const categoryStr = "소설 > SF 소설 > 소설 > 영미소설";
+        document.getElementById('detail-category').innerText = categoryStr;
+        
+        // 제목 바인딩
+        document.getElementById('detail-title').innerText = finalTitle;
+        const subTitleEl = document.getElementById('book-title-sub');
+        if(subTitleEl) subTitleEl.innerText = finalSubTitle;
+
+        // 평점 및 리뷰 수 (로컬 데이터 우선)
+        document.getElementById('detail-score').innerText = finalRating;
+        document.getElementById('detail-count').innerText = finalReviewCount;
+
+        // 가격 정보 연동 (API 데이터가 있으면 연동, 없으면 더미 데이터 15,400원)
+        const priceOriginal = document.getElementById('detail-price-original');
+        const priceSale = document.getElementById('detail-price-sale');
+        if (priceOriginal && priceSale) {
+            if (doc && doc.price && doc.price > 0) {
+                priceOriginal.innerText = doc.price.toLocaleString() + '원';
+                priceSale.innerText = (doc.sale_price > 0 ? doc.sale_price.toLocaleString() : doc.price.toLocaleString()) + '원';
+            } else {
+                priceOriginal.innerText = "15,400원";
+                priceSale.innerText = "15,400원";
+            }
         }
+
+        // 저자 및 출판사
+        document.getElementById('detail-author-publisher').innerHTML = 
+            `<b>${finalAuthors}</b> 저자 | <b>${finalTranslators}</b> 번역<br>${finalPublisher} 출판`;
+
+        // 작품 소개 파싱 
+        tabData.desc = finalDesc;
+        tabData.review = "출판사 서평 정보가 없습니다.";
+        tabData.toc = "목차 정보가 없습니다.";
+        document.getElementById('detail-description').innerHTML = tabData.desc;
+
+        // 2. 부가 정보 (회색 박스) 채우기
+        if(doc?.datetime) document.getElementById('meta-publish').innerText = doc.datetime.substring(0, 10);
+        document.getElementById('meta-file').innerText = "EPUB | 10.3MB"; // 임의
+        if(doc?.isbn) document.getElementById('meta-isbn').innerText = doc.isbn.split(' ')[0];
+        
+        const svgTTS = `<svg aria-label="TTS(듣기) 지원" fill="none" height="18" viewBox="0 0 18 18" width="18" xmlns="http://www.w3.org/2000/svg" style="vertical-align: text-bottom;"><path clip-rule="evenodd" d="M2.4375 8.73453V9.67578H2.44212C2.43906 9.70808 2.4375 9.74081 2.4375 9.7739V14.287C2.4375 14.855 2.89801 15.3155 3.46607 15.3155H6.03763C6.60569 15.3155 7.0662 14.855 7.0662 14.287V9.7739C7.0662 9.20584 6.60569 8.74533 6.03763 8.74533H3.72V8.73453C3.72 5.82054 6.08226 3.45828 8.99625 3.45828C11.9102 3.45828 14.2725 5.82054 14.2725 8.73453V8.74533H11.9598C11.3918 8.74533 10.9313 9.20584 10.9313 9.7739V14.287C10.9313 14.855 11.3918 15.3155 11.9598 15.3155H14.5314C15.0994 15.3155 15.56 14.855 15.56 14.287V9.7739C15.56 9.73961 15.5583 9.70571 15.555 9.67228V8.73453C15.555 5.11223 12.6185 2.17578 8.99625 2.17578C5.37395 2.17578 2.4375 5.11223 2.4375 8.73453ZM3.72321 10.031V14.0298H5.78048V10.031H3.72321ZM12.217 14.0298V10.031H14.2742V14.0298H12.217Z" fill="#787878" fill-rule="evenodd"></path></svg>`;
+        document.getElementById('meta-tts').innerHTML = `<span style="display:inline-flex;align-items:center;gap:4px;color:#787878;">${svgTTS} TTS(듣기) 지원</span>`;
+        
+        // 지원 기기 (배열 형태 하드코딩)
+        const supportEl = document.getElementById('meta-support');
+        if(supportEl) {
+            const svgApp = `<svg aria-label="앱 지원" fill="none" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;"><path clip-rule="evenodd" d="M7.91564 2.57361C6.67024 2.57361 5.66064 3.5832 5.66064 4.82861V19.1715C5.66064 20.4169 6.67024 21.4265 7.91564 21.4265H16.0871C17.3325 21.4265 18.3421 20.4169 18.3421 19.1715V4.82861C18.3421 3.58321 17.3325 2.57361 16.0871 2.57361H7.91564ZM7.37064 4.82861C7.37064 4.52761 7.61465 4.28361 7.91564 4.28361H16.0871C16.3881 4.28361 16.6321 4.52761 16.6321 4.82861V19.1715C16.6321 19.4725 16.3881 19.7165 16.0871 19.7165H7.91564C7.61465 19.7165 7.37064 19.4725 7.37064 19.1715V4.82861ZM11.1429 16.6294C10.6707 16.6294 10.2879 17.0122 10.2879 17.4844C10.2879 17.9566 10.6707 18.3394 11.1429 18.3394H12.8572C13.3294 18.3394 13.7122 17.9566 13.7122 17.4844C13.7122 17.0122 13.3294 16.6294 12.8572 16.6294H11.1429Z" fill="currentColor" fill-rule="evenodd"></path></svg>`;
+            const svgPC = `<svg aria-label="PC뷰어 지원" fill="none" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;"><path clip-rule="evenodd" d="M2.56641 5.68073C2.56641 4.43414 3.57696 3.42358 4.82355 3.42358H19.1736C20.4201 3.42358 21.4307 4.43414 21.4307 5.68073V13.8607C21.4307 15.1073 20.4201 16.1179 19.1735 16.1179H12.8407C12.8515 16.1722 12.8571 16.2283 12.8571 16.2857V18.8572H15.0844C15.5577 18.8572 15.9415 19.2409 15.9415 19.7143C15.9415 20.1877 15.5577 20.5715 15.0844 20.5715H8.91293C8.43954 20.5715 8.05579 20.1877 8.05579 19.7143C8.05579 19.2409 8.43954 18.8572 8.91293 18.8572H11.1428V16.2857C11.1428 16.2283 11.1485 16.1722 11.1593 16.1179H4.82355C3.57696 16.1179 2.56641 15.1073 2.56641 13.8607V5.68073ZM4.82355 5.13787C4.52374 5.13787 4.28069 5.38091 4.28069 5.68073V13.8607C4.28069 14.1605 4.52374 14.4036 4.82355 14.4036H19.1735C19.4734 14.4036 19.7164 14.1605 19.7164 13.8607V5.68073C19.7164 5.38091 19.4734 5.13787 19.1736 5.13787H4.82355Z" fill="currentColor" fill-rule="evenodd"></path></svg>`;
+            const svgPaper = `<svg aria-label="PAPER 지원" fill="none" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;"><path clip-rule="evenodd" d="M14.0557 3.40002H15.77V3.40006H17.4571C18.7037 3.40006 19.7142 4.41062 19.7142 5.6572V18.2858C19.7142 19.5324 18.7037 20.5429 17.4571 20.5429H6.54279C5.2962 20.5429 4.28564 19.5324 4.28564 18.2858V5.6572C4.28564 4.41062 5.2962 3.40006 6.54279 3.40006H14.0557V3.40002ZM14.0557 5.11435H6.54279C6.24298 5.11435 5.99993 5.35739 5.99993 5.6572V18.2858C5.99993 18.5856 6.24298 18.8286 6.54279 18.8286H14.0557V17.9263V5.11435ZM15.77 18.8286H17.4571C17.7569 18.8286 17.9999 18.5856 17.9999 18.2858V5.6572C17.9999 5.35739 17.7569 5.11435 17.4571 5.11435H15.77V17.9263V18.8286Z" fill="currentColor" fill-rule="evenodd"></path></svg>`;
+            
+            const devices = ['iOS 앱', 'Android 앱', 'PC', 'Mac', 'PAPER'];
+            supportEl.innerHTML = devices.map(dev => {
+                let icon = '';
+                if(dev.includes('앱')) icon = svgApp;
+                else if(dev.includes('PC') || dev.includes('Mac')) icon = svgPC;
+                else if(dev.includes('PAPER')) icon = svgPaper;
+                return `<span style="display:inline-flex;align-items:center;gap:4px;color:#787878;">${icon} <span>${dev}</span></span>`;
+            }).join('<span style="color:#d1d5d9; margin: 0 6px;">|</span>');
+        }
+
+        // 3. 커버 이미지 (로컬 고화질 이미지 우선)
+        const coverImg = document.getElementById('detail-cover');
+        if (finalCover && coverImg) {
+            coverImg.src = finalCover;
+        }
+
     } catch (e) {
-        console.error(e);
-        document.getElementById('detail-cover').src = "img/book_book_images/project_hail_mary.webp";
+        console.error("도서 정보를 불러오지 못했습니다.", e);
     }
 }
 
@@ -348,7 +378,7 @@ async function fetchSidebarBest(query, elementId) {
             return `
                 <li class="sidebar-best-item">
                     <span class="sidebar-best-rank" style="color: ${color};">${rank}</span>
-                    <a href="index.html" class="sidebar-best-title">${doc.title}</a>
+                    <a href="sub.html?title=${encodeURIComponent(doc.title)}" class="sidebar-best-title">${doc.title}</a>
                 </li>
             `;
         }).join('');
@@ -378,7 +408,7 @@ async function fetchAuthorWorks() {
             
             return `
             <div class="discovery-item">
-                <a href="index.html">
+                <a href="sub.html?title=${encodeURIComponent(doc.title)}">
                     <div class="discovery-cover-wrapper">
                         ${ronlyBadge}
                         <img src="${doc.thumbnail}" alt="${doc.title}" class="discovery-cover">
@@ -522,7 +552,7 @@ async function fetchSeriesWorks() {
             
             return `
             <div class="discovery-item">
-                <a href="index.html">
+                <a href="sub.html?title=${encodeURIComponent(doc.title)}">
                     <div class="discovery-cover-wrapper">
                         <img src="${doc.thumbnail}" alt="${doc.title}" class="discovery-cover">
                     </div>
@@ -570,7 +600,7 @@ async function fetchAndRenderBooks(query, targetId, count = 6) {
             
             return `
             <div class="discovery-item">
-                <a href="index.html">
+                <a href="sub.html?title=${encodeURIComponent(doc.title)}">
                     <div class="discovery-cover-wrapper">
                         <img src="${doc.thumbnail}" alt="${doc.title}" class="discovery-cover">
                     </div>
