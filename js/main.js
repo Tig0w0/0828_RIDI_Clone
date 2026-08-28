@@ -5,10 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchMainBanners(); // 카카오 API 대신 로컬 main.json 사용
     fetchKakaoBooks("소설"); // 추천 도서 리스트용 
     
-    // 리디의 발견 포맷 (3개 섹션)
-    fetchKakaoDiscoveryList("인문학", "discovery-list"); // 오늘 리디의 발견 (검색결과 확보를 위해 인문학 검색)
-    fetchKakaoDiscoveryList("신작", "new-works-list"); // 새로 나온 작품
-    fetchKakaoDiscoveryList("자기계발", "odyssey-list"); // 오디세이랑 함께 보면 좋아요!
+    // 북 리스트 슬라이더 검색어
+    fetchKakaoDiscoveryList("판타지소설", "discovery-list"); // 오늘 리디의 발견 (검색결과 확보를 위해 인문학 검색)
+    fetchKakaoDiscoveryList("대체역사소설", "new-works-list"); // 새로 나온 작품
+    fetchKakaoDiscoveryList("그리스신화", "odyssey-list"); // 오디세이랑 함께 보면 좋아요!
     fetchWouldYouLike();
     fetchRidiOnly();
 
@@ -26,6 +26,42 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// 카카오 API 응답에서 중복된 제목을 제거하고 이미지가 있는 도서만 추출하는 헬퍼 함수
+function getUniqueBooks(documents, limit) {
+    const uniqueDocs = [];
+    const titles = new Set();
+    for (const doc of documents) {
+        // 제목 정규화: 시리즈, 분권(1권, 2권 등) 도배 방지
+        let normalizedTitle = doc.title.toLowerCase();
+        
+        // 1. 괄호 안의 내용(양장본, 세트 등) 및 부제(콜론, 하이픈 이후) 제거
+        normalizedTitle = normalizedTitle.replace(/\(.*?\)|\[.*?\]/g, '');
+        normalizedTitle = normalizedTitle.split(':')[0].split('-')[0];
+        
+        // 2. n권, n부, vol.n, 상/중/하 등 연속된 시리즈 표시자 제거
+        normalizedTitle = normalizedTitle.replace(/\d+\s*(권|부|화|집|장)/g, '');
+        normalizedTitle = normalizedTitle.replace(/상|중|하/g, '');
+        normalizedTitle = normalizedTitle.replace(/(vol|part)\.?\s*\d+/gi, '');
+        
+        // 3. 특수기호 및 공백 완전 제거
+        normalizedTitle = normalizedTitle.replace(/[^a-z0-9가-힣]/g, '');
+
+        // 4. 문자열 끝에 남은 숫자 제거 (예: 철종2 -> 철종)
+        // 단, 1984처럼 제목 자체가 숫자인 경우를 대비해 예외 처리
+        let coreTitle = normalizedTitle.replace(/\d+$/, '');
+        if (coreTitle.length > 0) {
+            normalizedTitle = coreTitle;
+        }
+
+        if (doc.thumbnail && !titles.has(normalizedTitle)) {
+            titles.add(normalizedTitle);
+            uniqueDocs.push(doc);
+            if (uniqueDocs.length >= limit) break;
+        }
+    }
+    return uniqueDocs;
+}
 
 async function fetchMainBanners() {
     try {
@@ -84,8 +120,8 @@ async function fetchKakaoBooks(query) {
 
         const data = await response.json();
         
-        // 이미지가 있는 책만 필터링하여 10권만 추출
-        const validDocs = data.documents.filter(doc => doc.thumbnail).slice(0, 10);
+        // 중복 제거 및 이미지 있는 책 10권(또는 스크롤용 18권) 추출
+        const validDocs = getUniqueBooks(data.documents, 18);
         
         // 카카오 API 응답 데이터를 우리 렌더링 규격에 맞게 변환
         const formattedBooks = validDocs.map((doc, index) => {
@@ -157,8 +193,8 @@ function renderReadingBooks(books) {
     const list = document.getElementById('now-reading-list');
     if (!list) return;
 
-    // 최대 9권만 표시 (3x3 그리드)
-    const pageBooks = books.slice(0, 9);
+    // 스크롤이 가능하도록 최대 18권 표시
+    const pageBooks = books.slice(0, 18);
 
     list.innerHTML = pageBooks.map(book => `
         <li class="book-grid-item">
@@ -179,6 +215,8 @@ function renderReadingBooks(books) {
             </a>
         </li>
     `).join('');
+
+    bindSliderEvents(list);
 }
 
 async function fetchKakaoDiscoveryList(query, listId) {
@@ -193,8 +231,8 @@ async function fetchKakaoDiscoveryList(query, listId) {
         const list = document.getElementById(listId);
         if (!list) return;
         
-        // 이미지가 있는 데이터만 필터링하여 6개 추출
-        const validDocs = data.documents.filter(doc => doc.thumbnail).slice(0, 6);
+        // 중복 제거 및 이미지가 있는 데이터만 18개 추출
+        const validDocs = getUniqueBooks(data.documents, 18);
         
         list.innerHTML = validDocs.map(doc => {
             // 별점 랜덤 부여 (0 또는 4점대)
@@ -217,6 +255,8 @@ async function fetchKakaoDiscoveryList(query, listId) {
                 </a>
             </li>
         `}).join('');
+
+        bindSliderEvents(list);
     } catch (e) {
         console.error(e);
     }
@@ -235,8 +275,8 @@ async function fetchKakaoEvents(query) {
         const list = document.getElementById('event-list');
         if (!list) return;
 
-        // 이미지가 있는 데이터만 필터링하여 3개 추출
-        const validDocs = data.documents.filter(doc => doc.thumbnail).slice(0, 3);
+        // 중복 제거 및 이미지가 있는 데이터만 3개 추출
+        const validDocs = getUniqueBooks(data.documents, 3);
 
         list.innerHTML = validDocs.map((doc, idx) => `
             <a href="#" class="event-item" style="background-color: ${colors[idx % colors.length]};">
@@ -263,8 +303,8 @@ async function fetchKakaoBest(query) {
         const list = document.getElementById('best-list');
         if (!list) return;
 
-        // 이미지가 있는 데이터만 필터링하여 9개 추출
-        const validDocs = data.documents.filter(doc => doc.thumbnail).slice(0, 9);
+        // 중복 제거 및 이미지가 있는 데이터만 9개 추출
+        const validDocs = getUniqueBooks(data.documents, 9);
 
         list.innerHTML = validDocs.map((doc, idx) => {
             const rating = (Math.random() * 1 + 4).toFixed(1); 
@@ -491,7 +531,53 @@ async function fetchRidiOnly() {
                 </a>
             </li>
         `).join('');
+        
+        bindSliderEvents(list);
     } catch (e) {
         console.error(e);
     }
+}
+
+// 메인페이지 범용 슬라이더 버튼 및 스크롤 이벤트 바인딩
+function bindSliderEvents(list) {
+    if (!list) return;
+    const container = list.parentElement;
+    if (!container) return;
+    
+    const prevBtn = container.querySelector('.grid-nav-btn.prev');
+    const nextBtn = container.querySelector('.grid-nav-btn.next');
+    
+    // 버튼이 없는 컨테이너면 스크롤 이벤트만 바인딩하거나 무시 (버튼이 없어도 스크롤 자체는 가능하지만 오류 방지)
+    const updateButtons = () => {
+        const maxScrollLeft = list.scrollWidth - list.clientWidth;
+        if (prevBtn) {
+            prevBtn.style.display = list.scrollLeft > 5 ? 'flex' : 'none';
+        }
+        if (nextBtn) {
+            nextBtn.style.display = list.scrollLeft < maxScrollLeft - 10 ? 'flex' : 'none';
+        }
+    };
+
+    list.addEventListener('scroll', updateButtons);
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            const firstItem = list.firstElementChild;
+            if (!firstItem) return;
+            const itemWidth = firstItem.offsetWidth + 16;
+            list.scrollBy({ left: itemWidth * 5, behavior: 'smooth' });
+        });
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            const firstItem = list.firstElementChild;
+            if (!firstItem) return;
+            const itemWidth = firstItem.offsetWidth + 16;
+            list.scrollBy({ left: -itemWidth * 5, behavior: 'smooth' });
+        });
+    }
+
+    // 렌더링 직후 초기화
+    setTimeout(updateButtons, 100);
 }

@@ -1,6 +1,24 @@
 // 카카오 REST API 키
 const KAKAO_API_KEY = "9d24e2454b7ecf5ed014931df91f0c20";
 
+// 하단 도서 추천 섹션 카카오 API 검색 설정
+// [1] 작가의 대표 작품 (우주 3부작 등)
+const SERIES_QUERY = "앤디 위어";
+const SERIES_SIZE = 10;
+const SERIES_TARGET_TITLES = ['마션', '아르테미스'];
+
+// [2] 함께 구매한 작품
+const BOUGHT_TOGETHER_QUERY = "영화";
+const BOUGHT_TOGETHER_SIZE = 18;
+
+// [3] 함께 둘러본 작품
+const VIEWED_TOGETHER_QUERY = '원작소설';
+const VIEWED_TOGETHER_SIZE = 18;
+
+// [4] SF 소설 베스트
+const SF_BEST_QUERY = "SF소설";
+const SF_BEST_SIZE = 18;
+
 let tabData = {
     desc: '',
     toc: '',
@@ -152,6 +170,42 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// 카카오 API 응답에서 중복된 제목을 제거하고 이미지가 있는 도서만 추출하는 헬퍼 함수
+function getUniqueBooks(documents, limit) {
+    const uniqueDocs = [];
+    const titles = new Set();
+    for (const doc of documents) {
+        // 제목 정규화: 시리즈, 분권(1권, 2권 등) 도배 방지
+        let normalizedTitle = doc.title.toLowerCase();
+        
+        // 1. 괄호 안의 내용(양장본, 세트 등) 및 부제(콜론, 하이픈 이후) 제거
+        normalizedTitle = normalizedTitle.replace(/\(.*?\)|\[.*?\]/g, '');
+        normalizedTitle = normalizedTitle.split(':')[0].split('-')[0];
+        
+        // 2. n권, n부, vol.n, 상/중/하 등 연속된 시리즈 표시자 제거
+        normalizedTitle = normalizedTitle.replace(/\d+\s*(권|부|화|집|장)/g, '');
+        normalizedTitle = normalizedTitle.replace(/상|중|하/g, '');
+        normalizedTitle = normalizedTitle.replace(/(vol|part)\.?\s*\d+/gi, '');
+        
+        // 3. 특수기호 및 공백 완전 제거
+        normalizedTitle = normalizedTitle.replace(/[^a-z0-9가-힣]/g, '');
+
+        // 4. 문자열 끝에 남은 숫자 제거 (예: 철종2 -> 철종)
+        // 단, 1984처럼 제목 자체가 숫자인 경우를 대비해 예외 처리
+        let coreTitle = normalizedTitle.replace(/\d+$/, '');
+        if (coreTitle.length > 0) {
+            normalizedTitle = coreTitle;
+        }
+
+        if (doc.thumbnail && !titles.has(normalizedTitle)) {
+            titles.add(normalizedTitle);
+            uniqueDocs.push(doc);
+            if (uniqueDocs.length >= limit) break;
+        }
+    }
+    return uniqueDocs;
+}
 
 function extractSection(text, title) {
     const startTag = `<b>&lt;${title}&gt;</b>`;
@@ -323,9 +377,9 @@ async function fetchAuthorWorks() {
             let ronlyBadge = index === 0 ? '<div class="ronly-badge">R ONLY</div>' : ''; // 첫번째 항목에만 임의 배치
             
             return `
-            <div class="discovery-item" style="width: 140px;">
+            <div class="discovery-item">
                 <a href="#">
-                    <div class="discovery-cover-wrapper" style="padding-top: 145%;">
+                    <div class="discovery-cover-wrapper">
                         ${ronlyBadge}
                         <img src="${doc.thumbnail || 'https://via.placeholder.com/120x174'}" alt="${doc.title}" class="discovery-cover">
                     </div>
@@ -435,3 +489,160 @@ function renderReviewList(type) {
 }
 
 document.addEventListener('DOMContentLoaded', fetchReviews);
+
+// 앤디 위어 우주 3부작 시리즈 동적 검색
+async function fetchSeriesWorks() {
+    try {
+        const query = encodeURIComponent(SERIES_QUERY);
+        const url = `https://dapi.kakao.com/v3/search/book?query=${query}&size=${SERIES_SIZE}`;
+        const response = await fetch(url, {
+            headers: {
+                "Authorization": `KakaoAK ${KAKAO_API_KEY}`
+            }
+        });
+        const data = await response.json();
+        
+        const list = document.getElementById("series-works-list");
+        if (!list) return;
+
+        // 설정된 타겟 타이틀을 필터링 (원본 이미지와 동일한 구성)
+        const targetTitles = SERIES_TARGET_TITLES;
+        let seriesBooks = [];
+        
+        for (let target of targetTitles) {
+            const found = data.documents.find(doc => doc.title.includes(target));
+            if (found) seriesBooks.push(found);
+        }
+
+        list.innerHTML = seriesBooks.map(doc => {
+            const authors = doc.authors.join(', ');
+            // API에는 별점 정보가 없으므로 캡처본 기준 하드코딩된 평점 사용
+            let rating = doc.title.includes('마션') ? '4.8' : '4.1';
+            let count = doc.title.includes('마션') ? '(359)' : '(195)';
+            
+            return `
+            <div class="discovery-item">
+                <a href="#">
+                    <div class="discovery-cover-wrapper">
+                        <img src="${doc.thumbnail || 'https://via.placeholder.com/120x174'}" alt="${doc.title}" class="discovery-cover">
+                    </div>
+                    <div class="discovery-text">
+                        <span class="discovery-title" style="font-size: 16px; margin-bottom: 4px; white-space: normal; line-height: 1.4;">${doc.title}</span>
+                        <span class="discovery-author">${authors}</span>
+                        <span class="discovery-rating" style="margin-top: 4px;">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="#fa722e" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                            <span style="color: #fa722e;">${rating}</span> <span style="font-weight:400; color:#999;">${count}</span>
+                        </span>
+                    </div>
+                </a>
+            </div>
+            `;
+        }).join('');
+
+        bindSliderEvents(list);
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', fetchSeriesWorks);
+
+// 하단 추천 섹션 데이터 동적 로드 (함께 구매한 작품 등)
+async function fetchAndRenderBooks(query, targetId, count = 6) {
+    try {
+        const url = `https://dapi.kakao.com/v3/search/book?query=${encodeURIComponent(query)}&size=${count}`;
+        const response = await fetch(url, {
+            headers: { "Authorization": `KakaoAK ${KAKAO_API_KEY}` }
+        });
+        const data = await response.json();
+        
+        const list = document.getElementById(targetId);
+        if (!list) return;
+
+        // 중복 제거 및 이미지 있는 도서 추출
+        const validDocs = getUniqueBooks(data.documents, count);
+
+        list.innerHTML = validDocs.map(doc => {
+            const authors = doc.authors.join(', ');
+            // API에 평점 정보가 없으므로 화면 표시용 임의의 난수 평점 생성
+            const randomRating = (Math.random() * 0.7 + 4.2).toFixed(1);
+            const randomCount = Math.floor(Math.random() * 2000) + 10;
+            
+            return `
+            <div class="discovery-item">
+                <a href="#">
+                    <div class="discovery-cover-wrapper">
+                        <img src="${doc.thumbnail || 'https://via.placeholder.com/120x174'}" alt="${doc.title}" class="discovery-cover">
+                    </div>
+                    <div class="discovery-text">
+                        <span class="discovery-title" style="font-size: 16px; margin-bottom: 4px; white-space: normal; line-height: 1.4;">${doc.title}</span>
+                        <span class="discovery-author">${authors}</span>
+                        <span class="discovery-rating" style="margin-top: 4px;">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="#fa722e" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                            <span style="color: #fa722e;">${randomRating}</span> <span style="font-weight:400; color:#999;">(${randomCount})</span>
+                        </span>
+                    </div>
+                </a>
+            </div>
+            `;
+        }).join('');
+
+        bindSliderEvents(list);
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    fetchAndRenderBooks(BOUGHT_TOGETHER_QUERY, "bought-together-list", BOUGHT_TOGETHER_SIZE);
+    fetchAndRenderBooks(VIEWED_TOGETHER_QUERY, "viewed-together-list", VIEWED_TOGETHER_SIZE);
+    fetchAndRenderBooks(SF_BEST_QUERY, "sf-best-list", SF_BEST_SIZE);
+});
+
+// 슬라이더 이전/다음 버튼 동적 처리 및 스크롤 이벤트 바인딩
+function bindSliderEvents(list) {
+    const container = list.parentElement;
+    const prevBtn = container.querySelector('.prev-btn');
+    const nextBtn = container.querySelector('.next-btn');
+    if (!prevBtn || !nextBtn) return;
+
+    const updateButtons = () => {
+        // scrollWidth: 요소의 전체 스크롤 가능한 너비
+        // clientWidth: 현재 화면에 보여지는 요소의 너비
+        const maxScrollLeft = list.scrollWidth - list.clientWidth;
+        
+        // 스크롤이 맨 앞이 아니면 이전 버튼 표시
+        if (list.scrollLeft > 5) {
+            prevBtn.style.display = 'flex';
+        } else {
+            prevBtn.style.display = 'none';
+        }
+        
+        // 스크롤이 맨 끝이 아니면 다음 버튼 표시 (여유 오차 10px)
+        if (list.scrollLeft < maxScrollLeft - 10) {
+            nextBtn.style.display = 'flex';
+        } else {
+            nextBtn.style.display = 'none';
+        }
+    };
+
+    list.addEventListener('scroll', updateButtons);
+
+    nextBtn.addEventListener('click', () => {
+        const firstItem = list.querySelector('.discovery-item');
+        if (!firstItem) return;
+        // 실제 아이템 너비 + gap(16px)을 정확히 계산하여 5칸씩 이동
+        const itemWidth = firstItem.offsetWidth + 16;
+        list.scrollBy({ left: itemWidth * 5, behavior: 'smooth' });
+    });
+
+    prevBtn.addEventListener('click', () => {
+        const firstItem = list.querySelector('.discovery-item');
+        if (!firstItem) return;
+        const itemWidth = firstItem.offsetWidth + 16;
+        list.scrollBy({ left: -itemWidth * 5, behavior: 'smooth' });
+    });
+
+    // 렌더링 직후 DOM 크기 계산을 위해 약간의 딜레이 후 버튼 상태 초기화
+    setTimeout(updateButtons, 100);
+}

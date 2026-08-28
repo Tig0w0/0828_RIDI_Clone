@@ -73,7 +73,7 @@
     text-decoration: none;
 }
 .footer-bottom {
-    border-top: 1px solid var(--color-border);
+    
     margin-top: 40px;
     padding-top: 40px;
 }
@@ -83,7 +83,7 @@
 .btn-business-info {
     font-size: 13px;
     font-weight: 700;
-    color: var(--color-text-main);
+    color: #787878;
     background: none;
     border: none;
     cursor: pointer;
@@ -116,7 +116,7 @@
 }
 .footer-terms strong {
     font-weight: 700;
-    color: var(--color-text-main);
+    color: #787878;
 }
 .copyright {
     color: var(--color-text-light);

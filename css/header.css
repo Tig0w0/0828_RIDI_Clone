@@ -74,17 +74,12 @@
 .nav-list li.active a {
     color: var(--color-primary);
 }
-.badge-n {
-    display: inline-block;
-    background: var(--color-primary);
-    color: #fff;
-    font-size: 9px;
-    font-weight: 800;
-    padding: 1px 3px;
-    border-radius: 3px;
-    margin-left: 4px;
-    vertical-align: top;
-    margin-top: 2px;
+.badge-n-img {
+    position: absolute;
+    top: 14px;
+    right: -8px;
+    width: 6px;
+    height: 8px;
 }
 .nav-right {
     display: flex;

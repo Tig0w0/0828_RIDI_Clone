@@ -2,7 +2,12 @@
 /* 상세페이지 메인 컨텐츠 영역 */
 .sub-main-content {
     margin-top: 40px;
-    padding-bottom: 60px;
+    padding-bottom: 0px;
+}
+
+/* 서브페이지 본문 직후의 푸터 상단 마진 제거하여 딱 붙게 처리 */
+.sub-main-content + .footer {
+    margin-top: 0;
 }
 
 /* 3단 레이아웃 설정 */
@@ -356,6 +361,18 @@
 .sidebar-best-title:hover {
     text-decoration: underline;
 }
+.sidebar-best-list li a:hover {
+    background-color: var(--color-bg-gray);
+}
+
+/* 서브페이지 전용 헤더 네비게이션 스타일 (메인과 달리 회색 및 얇은 폰트) */
+.sub-header .nav-list li a {
+    color: #808997;
+    font-weight: 500;
+}
+.sub-header .nav-list li a:hover {
+    color: #404755;
+}
 
 /* ---------------------------------
    작가 섹션 스타일 (Author Section)
@@ -707,3 +724,12 @@
     color: var(--color-text-sub);
     cursor: pointer;
 }
+
+/* ---------------------------------
+   시리즈/세트 섹션 스타일
+--------------------------------- */
+.series-section {
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--color-border);
+}
+

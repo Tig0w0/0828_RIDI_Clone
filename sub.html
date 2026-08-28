@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="css/sub.css">
 </head>
 <body>
-    <header class="header">
+    <header class="header sub-header">
         <div class="header-top">
             <div class="header-top-inner">
                 <h1 class="logo">
@@ -39,8 +39,8 @@
                         <li><a href="#">만화</a></li>
                         <li><a href="#">웹툰</a></li>
                         <li><a href="#">웹소설</a></li>
-                        <li class="active"><a href="#">도서</a></li>
-                        <li><a href="#">리디샵<span class="badge-n">N</span></a></li>
+                        <li><a href="#">도서</a></li>
+                        <li><a href="#" style="position: relative;">리디샵<img src="img/menu_icon/nav_new_badge.webp" class="badge-n-img" alt="N"></a></li>
                         <li>
                             <a href="#">셀렉트
                                 <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" style="margin-left: 2px;"><path fill-rule="evenodd" clip-rule="evenodd" d="M11 5h1v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3v1H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V5Zm2.854-3.146L11 4.707 10.293 4l2.853-2.854L11 1V0h4v4h-1V1.854Z"></path></svg>
@@ -62,19 +62,7 @@
         </div>
     </header>
 
-    <nav class="lnb-wrapper">
-        <div class="lnb-inner">
-            <ul class="lnb-list">
-                <li class="active"><a href="#">추천</a></li>
-                <li><a href="#">기획전</a></li>
-                <li><a href="#">소설</a></li>
-                <li><a href="#">인문/사회/역사</a></li>
-                <li><a href="#">경영/경제</a></li>
-                <li><a href="#">자기계발</a></li>
-                <li><a href="#">에세이/시</a></li>
-            </ul>
-        </div>
-    </nav>
+
 
     <main class="main-content sub-main-content">
         <div class="sub-layout">
@@ -326,6 +314,65 @@
                     <ul class="review-list" id="review-list-container">
                         <!-- JS Injected -->
                     </ul>
+                </section>
+
+                <!-- 시리즈 섹션 추가 -->
+                <section class="series-section" style="margin-top: 60px;">
+                    <div class="works-header" style="margin-bottom: 24px;">
+                        <h3 style="font-size: 18px; font-weight: 700;">앤디 위어 우주 3부작</h3>
+                        <a href="#" class="btn-works-more">더보기</a>
+                    </div>
+                    
+                    <div class="discovery-slider-container">
+                        <button class="grid-nav-btn prev-btn" style="left: -20px; right: auto; display: none;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+                        <div class="discovery-list" id="series-works-list">
+                            <!-- JS Injected -->
+                        </div>
+                        <button class="grid-nav-btn next-btn" style="right: -20px; display: none;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                    </div>
+                </section>
+
+                <!-- 함께 구매한 작품 -->
+                <section class="series-section" style="margin-top: 60px;">
+                    <div class="works-header" style="margin-bottom: 24px;">
+                        <h3 style="font-size: 18px; font-weight: 700;">함께 구매한 작품</h3>
+                    </div>
+                    <div class="discovery-slider-container">
+                        <button class="grid-nav-btn prev-btn" style="left: -20px; right: auto; display: none;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+                        <div class="discovery-list" id="bought-together-list">
+                            <!-- JS Injected -->
+                        </div>
+                        <button class="grid-nav-btn next-btn" style="right: -20px; display: none;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                    </div>
+                </section>
+
+                <!-- 함께 둘러본 작품 -->
+                <section class="series-section" style="margin-top: 60px;">
+                    <div class="works-header" style="margin-bottom: 24px;">
+                        <h3 style="font-size: 18px; font-weight: 700;">함께 둘러본 작품</h3>
+                    </div>
+                    <div class="discovery-slider-container">
+                        <button class="grid-nav-btn prev-btn" style="left: -20px; right: auto; display: none;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+                        <div class="discovery-list" id="viewed-together-list">
+                            <!-- JS Injected -->
+                        </div>
+                        <button class="grid-nav-btn next-btn" style="right: -20px; display: none;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                    </div>
+                </section>
+
+                <!-- SF 소설 베스트 -->
+                <section class="series-section" style="margin-top: 60px;">
+                    <div class="works-header" style="margin-bottom: 24px;">
+                        <h3 style="font-size: 18px; font-weight: 700;">SF 소설 베스트</h3>
+                        <a href="#" class="btn-works-more">더보기</a>
+                    </div>
+                    <div class="discovery-slider-container">
+                        <button class="grid-nav-btn prev-btn" style="left: -20px; right: auto; display: none;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+                        <div class="discovery-list" id="sf-best-list">
+                            <!-- JS Injected -->
+                        </div>
+                        <button class="grid-nav-btn next-btn" style="right: -20px; display: none;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                    </div>
                 </section>
             </div>
 

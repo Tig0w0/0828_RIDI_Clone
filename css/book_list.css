@@ -173,7 +173,6 @@
 .grid-nav-btn {
     position: absolute;
     top: 50%;
-    right: -20px;
     transform: translateY(-50%);
     width: 40px;
     height: 40px;
@@ -186,6 +185,14 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     z-index: 10;
     color: #333;
+}
+
+.grid-nav-btn.prev {
+    left: -20px;
+}
+
+.grid-nav-btn.next {
+    right: -20px;
 }
 
 /* Ridi Only Badges (리디에서만 볼 수 있는 도서용) */
