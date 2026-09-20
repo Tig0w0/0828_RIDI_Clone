@@ -1,6 +1,6 @@
 // 학습용 포트폴리오 프로젝트이며 Kakao Developers 도서 검색 API의 무료 쿼터를 사용합니다.
 // GitHub Pages에서 API를 직접 호출하기 위해 "학습용으로 무료 쿼터를 사용 중이라 API 키는 공개된 채로 두었습니다."
-// TODO: 실제 서비스로 확장할 경우 서버 또는 Edge Function 프록시로 이전하고 API 키는 환경변수로 관리할 예정입니다.
+// TODO: 추후 포트폴리오의 보안 구조를 개선할 경우 서버 또는 Edge Function 프록시를 사용해 API 키 노출을 줄이는 방안을 검토할 예정입니다.
 const KAKAO_API_KEY = "9d24e2454b7ecf5ed014931df91f0c20"; 
 
 document.addEventListener('DOMContentLoaded', () => {
