@@ -1,4 +1,6 @@
-// 카카오 REST API 키를 여기에 입력하세요
+// 학습용 포트폴리오 프로젝트이며 Kakao Developers 도서 검색 API의 무료 쿼터를 사용합니다.
+// GitHub Pages에서 API를 직접 호출하기 위해 "학습용으로 무료 쿼터를 사용 중이라 API 키는 공개된 채로 두었습니다."
+// TODO: 실제 서비스로 확장할 경우 서버 또는 Edge Function 프록시로 이전하고 API 키는 환경변수로 관리할 예정입니다.
 const KAKAO_API_KEY = "9d24e2454b7ecf5ed014931df91f0c20"; 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -125,7 +127,8 @@ async function fetchKakaoBooks(query) {
         
         // 카카오 API 응답 데이터를 우리 렌더링 규격에 맞게 변환
         const formattedBooks = validDocs.map((doc, index) => {
-            // 카카오 API는 별점/리뷰 수를 제공하지 않으므로 디자인 유지를 위해 랜덤(가상) 데이터 생성
+            // 카카오 API는 별점/리뷰 수를 제공하지 않으므로 현재는 디자인 유지를 위해 랜덤(가상) 데이터를 사용합니다.
+            // TODO: 포트폴리오 완성도를 위해 추후 가상 데이터임을 UI에 명확히 표시하거나 별도 정적 데이터/실데이터로 대체할 예정입니다.
             const mockRating = (Math.random() * (5.0 - 4.0) + 4.0).toFixed(1);
             const mockReviewCount = Math.floor(Math.random() * 2000) + 10;
             
@@ -235,7 +238,8 @@ async function fetchKakaoDiscoveryList(query, listId) {
         const validDocs = getUniqueBooks(data.documents, 18);
         
         list.innerHTML = validDocs.map(doc => {
-            // 별점 랜덤 부여 (0 또는 4점대)
+            // 카카오 API에 별점 정보가 없어 현재는 디자인 확인용 랜덤 값을 사용합니다.
+            // TODO: 추후 가상 데이터 표기 또는 신뢰할 수 있는 별도 데이터 소스로 교체할 예정입니다.
             const rating = Math.random() > 0.5 ? 0 : (Math.random() * 1 + 4).toFixed(1);
             return `
             <li class="discovery-item">
@@ -307,6 +311,8 @@ async function fetchKakaoBest(query) {
         const validDocs = getUniqueBooks(data.documents, 9);
 
         list.innerHTML = validDocs.map((doc, idx) => {
+            // 카카오 API에 별점/리뷰 수가 없어 현재는 레이아웃 확인용 랜덤 값을 사용합니다.
+            // TODO: 추후 가상 데이터 표기 또는 신뢰할 수 있는 별도 데이터 소스로 교체할 예정입니다.
             const rating = (Math.random() * 1 + 4).toFixed(1); 
             const reviewCount = Math.floor(Math.random() * 500) + 10;
             return `
